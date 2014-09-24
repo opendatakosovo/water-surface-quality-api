@@ -4,21 +4,19 @@ from bson import json_util
 
 from wsqa import mongo
 
-import flask_pymongo
 
-
-class MeasurmentsForEachStation(View):
+class AverageStationMeasurementsForGivenRiver(View):
 
     methods = ['GET']
 
-    def dispatch_request(self, slug):
+    def dispatch_request(self, river_slug):
         '''Get the average of each station measurements
         for a given river.
-        :param slug: slug value of the name of the river.
+        :param river_slug: slug value of the name of the river.
         '''
 
         # Match
-        match = self.get_match(slug)
+        match = self.get_match(river_slug)
 
         # Group
         group = self.get_group()
@@ -29,19 +27,22 @@ class MeasurmentsForEachStation(View):
             group
         ])
 
+        result = average_for_each_station['result']
+
         resp = Response(
-            response=json_util.dumps(average_for_each_station), mimetype='application/json')
+            response=json_util.dumps(result),
+            mimetype='application/json')
 
         return resp
 
-    def get_match(self, slug):
+    def get_match(self, river_slug):
         '''Build and return the match object to be used in aggregation pipeline.
-        :param slug: name slug of a river.
+        :param river_slug: name slug of a river.
         '''
 
         match = {
             "$match": {
-                "stacion.lumi.slug": slug
+                "stacion.lumi.slug": river_slug
             }
         }
 

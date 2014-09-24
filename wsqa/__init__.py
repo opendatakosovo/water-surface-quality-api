@@ -103,8 +103,8 @@ from views.index import Index
 
 # Import Aggregate views
 from views.aggregate.average.river import MeasurmentsForARiver
-from views.aggregate.average.riverstations import MeasurmentsForEachStation
-from views.aggregate.average.everystation import MeasurmentsForEveryStation
+from views.aggregate.average.riverstations import AverageStationMeasurementsForGivenRiver
+from views.aggregate.average.everystation import AllAverageStationMeasurements
 
 
 def register_url_rules(app):
@@ -117,13 +117,13 @@ def register_url_rules(app):
     app.add_url_rule('/', view_func=Index.as_view('index'))
 
     app.add_url_rule(
-        '/aggregate/average/river/<string:slug>',
-        view_func=MeasurmentsForARiver.as_view('average_measurments_for_a_river'))
+        '/aggregate/average/river/<string:river_slug>',
+        view_func=MeasurmentsForARiver.as_view('average_measurments_for_all_stations_of_a_given_river'))
 
     app.add_url_rule(
-        '/aggregate/average/river/<string:slug>/stations',
-        view_func=MeasurmentsForEachStation.as_view('average_of_each_station_measurments'))
+        '/aggregate/average/river/<string:river_slug>/stations',
+        view_func=AverageStationMeasurementsForGivenRiver.as_view('average_measurments_for_each_station_of_a_given_river'))
 
     app.add_url_rule(
         '/aggregate/average/stations',
-        view_func=MeasurmentsForEveryStation.as_view('average_of_every_station'))
+        view_func=AllAverageStationMeasurements.as_view('average_measurments_of_every_station'))

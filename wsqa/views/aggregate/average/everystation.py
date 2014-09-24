@@ -7,7 +7,7 @@ from wsqa import mongo
 import flask_pymongo
 
 
-class MeasurmentsForEveryStation(View):
+class AllAverageStationMeasurements(View):
 
     methods = ['GET']
 
@@ -19,13 +19,33 @@ class MeasurmentsForEveryStation(View):
         # Group
         group = self.get_group()
 
+        # Sort
+        sort = self.get_sort()
+
+        # The aggregation pipeline
+        pipeline = [group, sort]
+
+        collection = mongo.db.watersurfacequality
+
         # Execute aggregate query
-        average_for_every_station = mongo.db.watersurfacequality.aggregate([group])
+        station_averages = collection.aggregate(pipeline)
+
+        result = station_averages['result']
 
         resp = Response(
-            response=json_util.dumps(average_for_every_station), mimetype='application/json')
+            response=json_util.dumps(result),
+            mimetype='application/json')
 
         return resp
+
+    def get_sort(self):
+        sort = {
+            "$sort": {
+                "_id": flask_pymongo.ASCENDING
+            }
+        }
+
+        return sort
 
     def get_group(self):
         ''' Build and return the group object to be used
@@ -34,7 +54,7 @@ class MeasurmentsForEveryStation(View):
 
         group = {
             "$group": {
-                "_id": "$stacion.lumi.slug",
+                "_id": "$stacion.kodi",
                 "temperaturaUjit": {
                     "$avg": "$temperaturaUjit.vlere"
                 },
