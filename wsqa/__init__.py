@@ -101,7 +101,9 @@ def configure_logging(app):
 # Index page view.
 from views.index import Index
 
-# Import Aggregate views
+from views.aggregate.measurements import Measurements
+
+# Import Aggregate views for averages
 from views.aggregate.average.river import MeasurmentsForARiver
 from views.aggregate.average.riverstations import AverageStationMeasurementsForGivenRiver
 from views.aggregate.average.everystation import AllAverageStationMeasurements
@@ -117,13 +119,27 @@ def register_url_rules(app):
     app.add_url_rule('/', view_func=Index.as_view('index'))
 
     app.add_url_rule(
+        '/measurements',
+        view_func=Measurements.as_view('measurements'))
+
+    register_avg_url_rules(app)
+
+
+def register_avg_url_rules(app):
+    ''' Register url rules relating to getting the measurement averages.
+    :param app: the Flask app object.
+    '''
+    app.add_url_rule(
         '/aggregate/average/river/<string:river_slug>',
-        view_func=MeasurmentsForARiver.as_view('average_measurments_for_all_stations_of_a_given_river'))
+        view_func=MeasurmentsForARiver.as_view(
+            'average_measurments_for_all_stations_of_a_given_river'))
 
     app.add_url_rule(
         '/aggregate/average/river/<string:river_slug>/stations',
-        view_func=AverageStationMeasurementsForGivenRiver.as_view('average_measurments_for_each_station_of_a_given_river'))
+        view_func=AverageStationMeasurementsForGivenRiver.as_view(
+            'average_measurments_for_each_station_of_a_given_river'))
 
     app.add_url_rule(
         '/aggregate/average/stations',
-        view_func=AllAverageStationMeasurements.as_view('average_measurments_of_every_station'))
+        view_func=AllAverageStationMeasurements.as_view(
+            'average_measurments_of_every_station'))

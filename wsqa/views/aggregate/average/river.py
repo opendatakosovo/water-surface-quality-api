@@ -8,8 +8,6 @@ from average import AverageMeasurements
 
 class MeasurmentsForARiver(AverageMeasurements):
 
-    methods = ['GET']
-
     def dispatch_request(self, river_slug):
         '''Get the average of the measurements
         for a given river.
