@@ -22,7 +22,8 @@ class AverageStationMeasurementsForGivenRiver(AverageMeasurements):
         id_subdoc = {
             "kodi": "$stacion.kodi",
             "lumiEmri": "$stacion.lumi.emri",
-            "lumiSlug": "$stacion.lumi.slug"
+            "lumiSlug": "$stacion.lumi.slug",
+            "kordinatat": "$stacion.kordinatat"
         }
 
         group = self.get_group(id_subdoc)
