@@ -1,10 +1,11 @@
 from flask.views import View
 from flask import Response
-from bson import json_util
+from bson import json_util, SON
 
 from wsqa import mongo
 
 import flask_pymongo
+
 
 
 class AllAverageStationMeasurements(View):
@@ -40,9 +41,10 @@ class AllAverageStationMeasurements(View):
 
     def get_sort(self):
         sort = {
-            "$sort": {
-                "_id": flask_pymongo.ASCENDING
-            }
+            '$sort': SON([
+                ('_id.lumiSlug', flask_pymongo.ASCENDING),
+                ('_id.kodi', flask_pymongo.ASCENDING)
+            ])
         }
 
         return sort
@@ -54,7 +56,12 @@ class AllAverageStationMeasurements(View):
 
         group = {
             "$group": {
-                "_id": "$stacion.kodi",
+                "_id": {
+                    "kodi": "$stacion.kodi",
+                    "lumiEmri": "$stacion.lumi.emri",
+                    "lumiSlug": "$stacion.lumi.slug",
+                    "kordinatat": "$stacion.kordinatat"
+                },
                 "temperaturaUjit": {
                     "$avg": "$temperaturaUjit.vlere"
                 },
@@ -85,8 +92,11 @@ class AllAverageStationMeasurements(View):
                 "shpenzimiKimikOksigjenitMeDikromat": {
                     "$avg": "$shpenzimiKimikOksigjenitMeDikromat.vlere"
                 },
-                "shpenzimiBiokimikOksigjenit": {
-                    "$avg": "$shpenzimiBiokimikOksigjenit.vlere"
+                "shpenzimiBiokimikOksigjenitSHBO5": {
+                    "$avg": "$shpenzimiBiokimikOksigjenitSHBO5.vlere"
+                },
+                "shpenzimiBiokimikOksigjenitSHBO7": {
+                    "$avg": "$shpenzimiBiokimikOksigjenitSHBO7.vlere"
                 },
                 "karboniOrganikTotal": {
                     "$avg": "$karboniOrganikTotal.vlere"
