@@ -23,18 +23,11 @@ class Measurements(View):
         # Match
         year = request.args.get('year', None)
         month = request.args.get('month', None)
+        station_slug = request.args.get('station', None)
 
-        if year is not None and month is not None:
-            try:
-                year_int = int(year)
-                month_int = int(month)
-
-                match = self.get_match(year_int, month_int)
-                pipeline.append(match)
-
-            except ValueError:
-                error_msg = "There was an error casting year and/or month URL parameters: (%s, %s)." % (year, month)
-                current_app.logger.error(error_msg)
+        match = self.get_match(year, month, station_slug)
+        if match:
+            pipeline.append(match)
 
         # Sort
         sort = self.get_sort()
@@ -116,25 +109,53 @@ class Measurements(View):
 
         return project
 
-    def get_match(self, year, month):
+    def get_match(self, year=None, month=None, station_slug=None):
         '''Build and return the match object .
         :param year: the sampling year.
         :param month: the sampling month.
+        :param station_slug: the station name slug.
         '''
+
         match = {
-            "$match": {
-                "data.viti": year,
-                "data.muji": month
-            }
+            "$match": {}
         }
 
-        return match
+        # Process Year.
+        if year is not None and year != '':
+            try:
+                year_int = int(year)
+                match["$match"]["data.viti"] = year_int
+
+            except ValueError:
+                error_msg = "Error casting year URL parameters: %s." % year
+                current_app.logger.error(error_msg)
+
+        # Process Month.
+        if month is not None and month != '':
+            try:
+                month_int = int(month)
+                match["$match"]["data.muji"] = month_int
+
+            except ValueError:
+                error_msg = "Error casting month URL parameters: %s." % month
+                current_app.logger.error(error_msg)
+
+        # Process station slug.
+        if station_slug is not None and station_slug != '':
+            match["$match"]["stacion.slug"] = station_slug
+
+        if len(match["$match"]) > 0:
+            return match
+        else:
+            return None
 
     def get_sort(self):
         sort = {
             '$sort': SON([
                 ('stacion.lumi.slug', flask_pymongo.ASCENDING),
-                ('stacion.kodi', flask_pymongo.ASCENDING)
+                ('stacion.slug', flask_pymongo.ASCENDING),
+                ('data.viti', flask_pymongo.ASCENDING),
+                ('data.muji', flask_pymongo.ASCENDING)
             ])
         }
         return sort
