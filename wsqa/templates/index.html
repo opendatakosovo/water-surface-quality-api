@@ -1,9 +1,50 @@
-<!doctype html>
-<html>
-<head>
-	<title>Water Surface Quality API</title>
-</head>
-<body>
-	<h1> WATER SURFACE QUALITY API </h1>
-</body>
-</html>
+{% extends "layout.html" %}
+{% block body %}
+
+
+
+<h3>Water Surface Quality API</h3>
+<hr/>
+
+<p>
+    This Application Programming Interface (API) gives software developers access to the Water Surface Quality measurments done in all the Kosovo rivers. This data is compiled by <a href="http://www.ammk-rks.net/?page=2,1">Kosovo Agency for Environment Protection (KEPA)</a>.
+</p>
+<p>
+    We care about sharing and improvements, so the software behind this API is free and open under the <a href="http://www.gnu.org/licenses/gpl-2.0.html">GNU GPL v2.0</a> license. Anyone who distributes the code or a derivative work is required to make the source available under the same terms.
+</p>
+
+<br>
+
+<h3>Disclaimer</h3>
+<hr/>
+
+<p>
+    This API is an <a href="http://en.wiktionary.org/wiki/alpha_version">alpha version</a>. This means that it is still under development and may be subject to bugs. You can help by <a href="mailto:info@opendatakosovo.org"/>contacting us</a> to report issues or contribute fixes and improvements to the <a href="https://github.com/opendatakosovo/water-surface-quality-api">code base</a>.
+</p>
+
+<br>
+
+<h3>Getting Data</h3>
+<hr/>
+
+<p>
+    Retrieving data from the API is done through <a href="http://en.wikipedia.org/wiki/Representational_state_transfer">RESTful</a> HTTP GET Requests.
+</p>
+<br>
+<h4>All the measuremnts done in the Kosovo rivers</h4>
+<strong>Get all the measurments done throughout the regions rivers:</strong><br>
+/measurements<br><br><br>
+
+
+<h4>All the averages</h4>
+<strong>Get all the average measurements of all the stations on a given river:</strong><br>
+/aggregate/average/river/&lt;string:river_slug&gt;<br><br>
+
+<strong>Get all the average measurements of each station on a given river:</strong><br>
+/aggregate/average/river/&lt;string:river_slug&gt;/stations<br><br>
+
+<strong>Get all the average measurements of every station:</strong><br>
+/aggregate/average/stations<br><br><br>
+
+
+{% endblock %}
