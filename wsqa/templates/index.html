@@ -40,11 +40,51 @@
 <strong>Get all the average measurements of all the stations on a given river:</strong><br>
 /aggregate/average/river/&lt;string:river_slug&gt;<br><br>
 
+<strong>Get all the average measurements of all the stations on a given river based on a given year and month:</strong><br>
+/aggregate/average/river/&lt;string:river_slug&gt;&year=int?month=int<br><br>
+
 <strong>Get all the average measurements of each station on a given river:</strong><br>
 /aggregate/average/river/&lt;string:river_slug&gt;/stations<br><br>
 
 <strong>Get all the average measurements of every station:</strong><br>
 /aggregate/average/stations<br><br><br>
+
+
+<h3>Sample Requests</h3>
+<hr/>
+
+<p>
+    <strong>Get all the measurements done in every river:</strong></br>
+    <a href="{{ config.BASE_PATH }}/measurements">{{ config.BASE_PATH }}/measurements</a>
+</p>
+
+<br>
+
+<p>
+    <strong>Get all the measurements done in every river on a given year and month:</strong></br>
+    <a href="{{ config.BASE_PATH }}/measurements&year=2013?month=06">{{ config.BASE_PATH }}/measurements&year=2013?month=06</a>
+</p>
+
+<br>
+
+<p>
+    <strong>Get all the average measurements of all the stations in Lumbardhi i Pejes:</strong></br>
+    <a href="{{ config.BASE_PATH }}/aggregate/average/river/lumbardhi-i-pejes">{{ config.BASE_PATH }}/aggregate/average/river/lumbardhi-i-pejes</a>
+</p>
+
+<br>
+
+<p>
+    <strong>Get all the average measurements of each station in Lumi i Erenikut:</strong></br>
+    <a href="{{ config.BASE_PATH }}/aggregate/average/river/lumi-erenik/stations">{{ config.BASE_PATH }}/aggregate/average/river/lumi-erenik/stations</a>
+</p>
+
+<br>
+
+<p>
+    <strong>Get all the average measurements of every station in Kosovo:</strong></br>
+    <a href="{{ config.BASE_PATH }}/aggregate/average/stations">{{ config.BASE_PATH }}/aggregate/average/stations</a>
+</p>
 
 
 {% endblock %}
